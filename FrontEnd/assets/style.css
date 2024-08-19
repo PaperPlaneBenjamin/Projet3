@@ -186,3 +186,35 @@ footer nav ul {
 	margin: 2em
 }
 
+/******************** Add CSS ****************************************/
+
+.flex{
+	display: flex;
+	justify-content: center;
+	gap: 15px;
+	margin: 50px 0;
+}
+.item{
+	box-sizing: content-box;
+	height:35px;
+	display:flex;
+	align-items: center;
+	justify-content: center;
+	border:#1D6154 solid 1px;
+	border-radius: 60px;
+}
+
+.title{
+	font-family: 'Syne';
+	font-size: 16px;
+	color: #1D6154;
+	padding: 0 15px;;
+}
+
+.item:hover{
+	cursor: pointer;
+}
+.active-item{
+	background-color: #1D6154;
+}
+
