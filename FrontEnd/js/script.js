@@ -25,8 +25,7 @@ function addPicture(pictures){
 
 // Fonction qui crée les boutons de tri  
 function addButton (categories,pictures){
-    const ListH2 = document.querySelectorAll("#portfolio h2")
-    const h2 = ListH2[0]
+    const h2 = document.querySelector("#portfolio h2")
     const div =document.createElement("div")
     div.className="flex"
     h2.insertAdjacentElement("afterend",div)
@@ -78,7 +77,6 @@ function filterPictures(category,pictures){
     removePictureHTML()
     addPicture(picturesFiltered)
 }
-
 
 //Fonction principale qui appelle toutes les fonctions
 async function principal(){
