@@ -82,7 +82,10 @@ h2{
 	font-family: 'Syne';
 	font-weight: 700;
 	font-size: 30px;
-	color: #1D6154
+	color: #1D6154;
+	flex-grow: 1; /* Permet à H2 d'occuper l'espace restant */
+	text-align: center; /* Centre le texte dans son espace */
+	margin: 0;
 }
 nav ul {
 	display: flex;
@@ -277,4 +280,80 @@ body {
 
 .form-login button,div{
 	align-self: center;
+}
+.error-message{
+	margin-bottom: 10px;
+}
+
+/********************* CSS Modale *******************/
+.h2-modal{
+	display: flex;
+	align-items: center;
+	justify-content: center; 
+	position: relative;
+}
+
+.btn-modal {
+	display: flex;
+  	margin-left: 20px; 
+  	position: absolute;
+  	right: 330px; 
+	margin-bottom: 30px;
+	gap: 10px;
+	cursor: pointer;
+}
+.btn-modal i {
+	scale: 1.2;
+}
+
+aside{
+	display: none;
+	justify-content: center;
+	align-items: center;
+	position: fixed;
+	top: 0;
+	left: 0;
+	height: 100%;
+	width: 100%;
+	background:rgba(0, 0, 0, 0.3);
+
+}
+
+aside div {
+	display: flex;
+	flex-direction: column;
+	background-color: white;
+	width: 600px;
+	max-height: 600px;
+	padding: 20px;
+	border-radius: 10px;
+	gap: 20px;
+}
+
+aside div i {
+	align-self: flex-end;
+	cursor: pointer;
+}
+
+aside div p {
+	align-self: center;
+	font-size: 26px;
+}
+
+
+aside div hr{
+	color: grey;
+}
+
+.btn-add-picture{
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	background-color: #1D6154;
+	color: white;
+	width: 230px;
+	height: 0px;
+	font-family: 'Syne';
+	border-radius: 60px;
+	cursor: pointer;
 }
