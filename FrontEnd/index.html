@@ -49,12 +49,27 @@
 				</div>
 			</div>
 			<aside>
-				<div>
+				<div class="modale-gallery">
 					<i class="fa-solid fa-xmark"></i>
-					<p>Galerie photo</p>
+					<h3>Galerie photo</h3>
 					<div class="pictures-modal"></div>
 					<hr>
 					<div class="btn-add-picture">Ajouter une photo</div>
+				</div>
+				<div class="modale-add">
+					<div class="add-div-icons"><i class="fa-solid fa-arrow-left"></i><i class="fa-solid fa-xmark"></i></div>
+					<h3>Ajout photo</h3>
+					<div class="add-div"><i class="fa-regular fa-image fa-5x"></i><div class="btn-charge-picture">+ Ajouter photo</div><p>jpg, png : 4mo max</p></div>
+					<label for="title" class="label-add">Titre</label>
+					<input type="text" id="text">
+					<label for="category" class="label-add">Catégorie</label>
+					<select name="category" id="category"><option value=""></option>
+						<option value="dog">Dog</option>
+						<option value="cat">Cat</option>
+						<option value="hamster">Hamster</option>
+					</select>
+					<hr>
+					<div class="validate-btn">Valider</div>
 				</div>
 			</aside>
 			<div class="gallery">

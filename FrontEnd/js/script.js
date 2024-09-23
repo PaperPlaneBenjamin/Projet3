@@ -32,7 +32,9 @@ function addPicture(pictures){
         figureModale.appendChild(imgModale);
         const buttonTrash = document.createElement("button");
         buttonTrash.className="button-trash";
-        buttonTrash.innerHTML= '<i class="fa-solid fa-trash-can" style="color: #ffffff;"></i>';
+        const iconTrash = document.createElement("i")
+        iconTrash.className= "fa-solid fa-trash-can"
+        buttonTrash.appendChild(iconTrash)
         buttonTrash.addEventListener("click", () => {
             deletePicture(picture.id, figure, figureModale);
         });
@@ -122,40 +124,61 @@ function filterPictures(category,pictures){
 
 // supprime les boutons
 function deleteButton(){
-    const boxFlex = document.querySelector(".flex")
-    boxFlex.style.display="none"
+    const boxFlex = document.querySelector(".flex");
+    boxFlex.style.display="none";
 }
 
 // affiche le bouton modifier 
 function appearBtnModif(){
-    const btnModal = document.querySelector(".btn-modal")
-    btnModal.style.display = "flex"
+    const btnModal = document.querySelector(".btn-modal");
+    btnModal.style.display = "flex";
 }
 
 // affiche la modale 
 function appearModal(){
-    const modale = document.querySelector("aside")
-    const mark = document.querySelector('.fa-xmark')
-    const btnModal = document.querySelector(".btn-modal")
+    const modale = document.querySelector("aside");
+    const mark = document.querySelector('.modale-gallery .fa-xmark');
+    const btnModal = document.querySelector(".btn-modal");
     btnModal.addEventListener("click",()=>{
-        modale.style.display="flex"
+        modale.style.display="flex";
     })
     modale.addEventListener("click",(event)=>{
         if(event.target===modale){
-            modale.style.display="none"
+            modale.style.display="none";
         }
     })
     mark.addEventListener("click",()=>{
-        modale.style.display="none"
+        modale.style.display="none";
     })
 }
 
 // affiche le bandeau noir édition 
 function appearEdition(){
-    const edition = document.querySelector(".banner")
-    edition.style.display="flex"
+    const edition = document.querySelector(".banner");
+    edition.style.display="flex";
 }
 
+// Fonction qui gère la modale au click
+function modaleAdd(){
+    const btnAddPicture = document.querySelector(".btn-add-picture");
+    const modaleGallery = document.querySelector(".modale-gallery");
+    const modaleAdd = document.querySelector(".modale-add");
+    const iconReturn = document.querySelector(".fa-arrow-left")
+    const iconMark = document.querySelector('.modale-add .fa-xmark');
+    const asideAdd = document.querySelector("aside");
+    btnAddPicture.addEventListener("click",()=>{
+        modaleAdd.style.display="flex";
+        modaleGallery.style.display="none"
+    });
+    iconReturn.addEventListener("click",()=>{
+        modaleAdd.style.display="none";
+        modaleGallery.style.display="flex"
+    });
+    iconMark.addEventListener("click",()=>{
+        modaleAdd.style.display="none";
+    });
+
+}
 //Fonction principale qui appelle toutes les fonctions
 async function principal(){
     removePictureHTML();
@@ -174,6 +197,7 @@ async function principal(){
         appearEdition();
         appearBtnModif();
         appearModal();
+        modaleAdd();
     }
 };
 
