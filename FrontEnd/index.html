@@ -59,14 +59,16 @@
 				<div class="modale-add">
 					<div class="add-div-icons"><i class="fa-solid fa-arrow-left"></i><i class="fa-solid fa-xmark"></i></div>
 					<h3>Ajout photo</h3>
-					<div class="add-div"><i class="fa-regular fa-image fa-5x"></i><div class="btn-charge-picture">+ Ajouter photo</div><p>jpg, png : 4mo max</p></div>
+					<div class="add-div">
+						<i class="fa-regular fa-image fa-5x"></i>
+						<div class="btn-charge-picture">+ Ajouter photo</div>
+						<input type="file" id="fileInput" accept="image/*">
+						<p>jpg, png : 4mo max</p>
+					</div>
 					<label for="title" class="label-add">Titre</label>
 					<input type="text" id="text">
 					<label for="category" class="label-add">Catégorie</label>
-					<select name="category" id="category"><option value=""></option>
-						<option value="dog">Dog</option>
-						<option value="cat">Cat</option>
-						<option value="hamster">Hamster</option>
+					<select name="category" id="category"><option value="" class="vacant"></option>
 					</select>
 					<hr>
 					<div class="validate-btn">Valider</div>

@@ -143,8 +143,9 @@ function appearModal(){
         modale.style.display="flex";
     })
     modale.addEventListener("click",(event)=>{
-        if(event.target===modale){
+        if(event.target===modale ){
             modale.style.display="none";
+            stopPropagation()
         }
     })
     mark.addEventListener("click",()=>{
@@ -173,11 +174,142 @@ function modaleAdd(){
     iconReturn.addEventListener("click",()=>{
         modaleAdd.style.display="none";
         modaleGallery.style.display="flex"
+        initializeProject();
     });
     iconMark.addEventListener("click",()=>{
+        asideAdd.style.display="none";
         modaleAdd.style.display="none";
+        modaleGallery.style.display="flex"
+        initializeProject();
     });
 
+}
+
+// Fonction qui permet de charger un projet
+function clickInput(){
+    document.querySelector('.btn-charge-picture').addEventListener('click', function() {
+        document.getElementById('fileInput').click();
+    });
+    document.getElementById('fileInput').addEventListener('change', function(event) {
+        let file = event.target.files[0]; 
+        if (file) {
+            let reader = new FileReader();
+    
+            reader.onload = function(e) {
+                let imgElement = document.createElement('img');
+                imgElement.src = e.target.result;
+                imgElement.className="picture-project"
+                imgElement.style.width="100%"
+                imgElement.style.height="100%"
+                imgElement.style.objectFit="contain"
+                const imagePreview = document.querySelector('.add-div');
+                let imagePreviewChildren = document.querySelectorAll('.add-div > *');
+                    imagePreviewChildren.forEach(child => {
+                        child.style.display = 'none';
+                    });
+                imagePreview.style.padding="0"
+                imagePreview.appendChild(imgElement); 
+            }
+    
+            reader.readAsDataURL(file);
+        }
+    });
+}
+// Fonction qui change la couleur du bouton valider si les tout les champs sont saisis
+function colorChange(){
+    let accept = false;
+    const fileInput = document.getElementById('fileInput');
+    const text = document.getElementById("text");
+    const category = document.getElementById('category');
+    const validate = document.querySelector(".validate-btn");
+    let fileIndex = fileInput.files[0]
+    if(fileInput && text && category && fileIndex && text.value !== "" && category.value !== ""){
+        accept=true;
+        validate.style.background="#1D6154"
+    }else{
+        validate.style.background="#A7A7A7"
+    }
+    return accept
+}
+
+// Fonction qui écoute les champs de saisie d'ajout d'un projet
+function validateChangeColor(){
+    document.getElementById('fileInput').addEventListener('change', colorChange);
+    document.getElementById('text').addEventListener('input', colorChange);
+    document.getElementById('category').addEventListener('change', colorChange);
+}
+
+// Fonction qui réinitialise la modale ajout d'un projet
+function initializeProject(){
+    const fileInput = document.getElementById('fileInput');
+    const text = document.getElementById("text");
+    const category = document.getElementById('category');
+    fileInput.value=""
+    const pictureProject = document.querySelector(".picture-project")
+    pictureProject.remove()
+    text.value="";
+    const vacantCategory = document.querySelector(".vacant")
+    category.value=vacantCategory.value
+    const imagePreview = document.querySelector('.add-div');
+    let imagePreviewChildren = document.querySelectorAll('.add-div > *');
+    imagePreviewChildren.forEach(child => {
+        if(child!==fileInput){
+            child.style.display = 'flex';
+        }
+     });
+
+}
+
+// Fonction qui ajoute dynamiquement les catégories au sélect de l'ajout photo
+function addCategoriesSelect(categories){
+    const select = document.getElementById("category");
+    categories.forEach(categorie=>{
+        console.log(categorie)
+        const option = document.createElement("option");
+        option.value = categorie;
+        option.text = categorie;
+        select.appendChild(option)
+    })
+}
+
+// 
+function fetchOrNotData(){
+    const validate = document.querySelector(".validate-btn");
+    if(validate.style.backgroundColor="#1D6154"){
+        fetchData();
+    }
+}
+
+// Fonction qui fetch les données du formulaire à l'API
+async function fetchData(){
+    document.querySelector('.validate-btn').addEventListener('click', async function() {
+        const fileInput = document.getElementById('fileInput').files[0];
+        const text = document.getElementById('text').value;
+        const category = document.getElementById('category').value;
+      
+        
+        const formData = new FormData();
+        formData.append('projet', fileInput);
+        formData.append('titre', text);
+        formData.append('categorie', category);
+      
+        try {
+          const response = await fetch('http://localhost:5678/api/works', {
+            method: 'POST',
+            body: formData,
+          });
+          console.log(response)
+          if (!response.ok) {
+            throw new Error('Une erreur est survenue lors de la requête.');
+          }
+      
+          const data = await response.json();
+          console.log(data)
+        } catch (error) {
+          console.error('Erreur:', error);
+        }
+      });
+      
 }
 //Fonction principale qui appelle toutes les fonctions
 async function principal(){
@@ -186,6 +318,7 @@ async function principal(){
     const pictures =  await response.json();
     addPicture(pictures);
     const categories = [...new Set(pictures.map(picture=>picture.category.name))];
+    console.log(categories)
     addButton(categories,pictures);
     const token = localStorage.getItem("identification");
     if (token) {
@@ -194,10 +327,14 @@ async function principal(){
         if (flex){
             deleteButton();
         }
+        addCategoriesSelect(categories)
         appearEdition();
         appearBtnModif();
         appearModal();
         modaleAdd();
+        clickInput();
+        validateChangeColor();
+        fetchOrNotData();
     }
 };
 
