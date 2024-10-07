@@ -4,7 +4,7 @@ function removePictureHTML(){
     figures.forEach(figure => {
         figure.remove();
     })
-};
+}
 
 // Fonction qui génère dynamiquement les images de l'API
 function addPicture(pictures){
@@ -24,7 +24,7 @@ function addPicture(pictures){
 
         // modale
         const figureModale = document.createElement("figure");
-        figureModale.className="figure-modale"
+        figureModale.className="figure-modale";
         galleryModal.appendChild(figureModale);
         const imgModale = document.createElement("img");
         imgModale.alt=`${picture.title}`;
@@ -32,15 +32,31 @@ function addPicture(pictures){
         figureModale.appendChild(imgModale);
         const buttonTrash = document.createElement("button");
         buttonTrash.className="button-trash";
-        const iconTrash = document.createElement("i")
-        iconTrash.className= "fa-solid fa-trash-can"
-        buttonTrash.appendChild(iconTrash)
+        const iconTrash = document.createElement("i");
+        iconTrash.className= "fa-solid fa-trash-can";
+        buttonTrash.appendChild(iconTrash);
         buttonTrash.addEventListener("click", () => {
             deletePicture(picture.id, figure, figureModale);
         });
         figureModale.appendChild(buttonTrash);
+        adjustNumber();
     })
-};
+}
+
+// Fonction qui teste si le nombre d'images est strictement supérieur à 12 et ajuste le css
+function adjustNumber(){
+    const allFigures = document.querySelectorAll('aside figure');
+    const h3Modale = document.querySelector('aside .modale-gallery h3');
+    const hrModale = document.querySelector('aside .modale-gallery hr');
+        if(allFigures.length>12){
+            h3Modale.classList.add('margin-adapt');
+            hrModale.classList.add('margin-adapt');
+        } else {
+            h3Modale.classList.remove('margin-adapt');
+            hrModale.classList.remove('margin-adapt');
+        }
+}
+
 
 // Fonction qui supprime les images au click sur les boutons 
 async function deletePicture(pictureId, figure, figureModale) {
@@ -52,7 +68,9 @@ async function deletePicture(pictureId, figure, figureModale) {
         if (response.ok) {
             figure.remove(); 
             figureModale.remove();
+            setTimeout(adjustNumber, 1);
 }}
+
 
 // Fonction qui crée les boutons de tri
 function createButton(categorie,div,pictures){
@@ -68,7 +86,7 @@ function createButton(categorie,div,pictures){
         filterPictures(categorie,pictures);
     })
     return button;
-};
+}
 
 
 // Fonction qui gère les boutons de tri  
@@ -76,14 +94,14 @@ function addButton (categories,pictures){
     const h2 = document.querySelector(".h2-modal");
     const div =document.createElement("div");
     div.className="flex";
-    div.style.display="flex"
+    div.style.display="flex";
     h2.insertAdjacentElement("afterend",div);
     const buttonTous = createButton("Tous",div,pictures);
     activeButton(buttonTous);
     categories.forEach((categorie)=>{
         createButton(categorie,div,pictures);
     })
-};
+}
 
 // Fonction qui gère le mode CSS actif du bouton sélectionné
 function activeButton(button){
@@ -97,14 +115,14 @@ function activeButton(button){
     const title = button.querySelector(".title");
     title.style.color='white';
     
-};
+}
 
 // Fonction qui filtre les images en fonction de la catégorie choisie 
 function filterPictures(category,pictures){
     const picturesFiltered = category === "Tous" ? pictures : pictures.filter(picture=>picture.category.name===category);
     removePictureHTML();
     addPicture(picturesFiltered);
-};
+}
 
  //Fonction qui change le texte du lien login à logout et ajoute un évènement au click à logout
  function loginLogout() {
@@ -139,13 +157,17 @@ function appearModal(){
     const modale = document.querySelector("aside");
     const mark = document.querySelector('.modale-gallery .fa-xmark');
     const btnModal = document.querySelector(".btn-modal");
+    const modaleGallery = document.querySelector(".modale-gallery");
+    const modaleAdd = document.querySelector(".modale-add");
     btnModal.addEventListener("click",()=>{
         modale.style.display="flex";
     })
     modale.addEventListener("click",(event)=>{
         if(event.target===modale ){
             modale.style.display="none";
-            stopPropagation()
+            modaleAdd.style.display="none";
+            modaleGallery.style.display="flex";
+            initializeProject();
         }
     })
     mark.addEventListener("click",()=>{
@@ -164,16 +186,17 @@ function modaleAdd(){
     const btnAddPicture = document.querySelector(".btn-add-picture");
     const modaleGallery = document.querySelector(".modale-gallery");
     const modaleAdd = document.querySelector(".modale-add");
-    const iconReturn = document.querySelector(".fa-arrow-left")
+    const iconReturn = document.querySelector(".fa-arrow-left");
     const iconMark = document.querySelector('.modale-add .fa-xmark');
     const asideAdd = document.querySelector("aside");
     btnAddPicture.addEventListener("click",()=>{
         modaleAdd.style.display="flex";
-        modaleGallery.style.display="none"
+        modaleGallery.style.display="none";
+        colorChange();
     });
     iconReturn.addEventListener("click",()=>{
         modaleAdd.style.display="none";
-        modaleGallery.style.display="flex"
+        modaleGallery.style.display="flex";
         initializeProject();
     });
     iconMark.addEventListener("click",()=>{
@@ -198,16 +221,16 @@ function clickInput(){
             reader.onload = function(e) {
                 let imgElement = document.createElement('img');
                 imgElement.src = e.target.result;
-                imgElement.className="picture-project"
-                imgElement.style.width="100%"
-                imgElement.style.height="100%"
-                imgElement.style.objectFit="contain"
+                imgElement.className="picture-project";
+                imgElement.style.width="100%";
+                imgElement.style.height="100%";
+                imgElement.style.objectFit="contain";
                 const imagePreview = document.querySelector('.add-div');
                 let imagePreviewChildren = document.querySelectorAll('.add-div > *');
                     imagePreviewChildren.forEach(child => {
                         child.style.display = 'none';
                     });
-                imagePreview.style.padding="0"
+                imagePreview.style.padding="0";
                 imagePreview.appendChild(imgElement); 
             }
     
@@ -217,19 +240,15 @@ function clickInput(){
 }
 // Fonction qui change la couleur du bouton valider si les tout les champs sont saisis
 function colorChange(){
-    let accept = false;
-    const fileInput = document.getElementById('fileInput');
-    const text = document.getElementById("text");
-    const category = document.getElementById('category');
+    const fileInput = document.getElementById('fileInput').files[0];
+    const text = document.getElementById("text").value;
+    const category = document.getElementById('category').value;
     const validate = document.querySelector(".validate-btn");
-    let fileIndex = fileInput.files[0]
-    if(fileInput && text && category && fileIndex && text.value !== "" && category.value !== ""){
-        accept=true;
-        validate.style.background="#1D6154"
+    if(fileInput && text !== "" && category !== ""){
+        validate.style.background="#1D6154";
     }else{
-        validate.style.background="#A7A7A7"
+        validate.style.background="#A7A7A7";
     }
-    return accept
 }
 
 // Fonction qui écoute les champs de saisie d'ajout d'un projet
@@ -244,12 +263,14 @@ function initializeProject(){
     const fileInput = document.getElementById('fileInput');
     const text = document.getElementById("text");
     const category = document.getElementById('category');
-    fileInput.value=""
-    const pictureProject = document.querySelector(".picture-project")
-    pictureProject.remove()
+    fileInput.value="";
+    const pictureProject = document.querySelector(".picture-project");
+    if (pictureProject){
+        pictureProject.remove();
+    }
     text.value="";
-    const vacantCategory = document.querySelector(".vacant")
-    category.value=vacantCategory.value
+    const vacantCategory = document.querySelector(".vacant");
+    category.value=vacantCategory.value;
     const imagePreview = document.querySelector('.add-div');
     let imagePreviewChildren = document.querySelectorAll('.add-div > *');
     imagePreviewChildren.forEach(child => {
@@ -264,53 +285,74 @@ function initializeProject(){
 function addCategoriesSelect(categories){
     const select = document.getElementById("category");
     categories.forEach(categorie=>{
-        console.log(categorie)
         const option = document.createElement("option");
         option.value = categorie;
         option.text = categorie;
-        select.appendChild(option)
+        select.appendChild(option);
     })
 }
 
-// 
+// Fonction qui fetch si le bouton est vert ( champ tous remplis )
 function fetchOrNotData(){
     const validate = document.querySelector(".validate-btn");
-    if(validate.style.backgroundColor="#1D6154"){
+    const modaleGallery = document.querySelector(".modale-gallery");
+    const modaleAdd = document.querySelector(".modale-add");
+    const asideAdd = document.querySelector("aside");
+    const colorValidate = window.getComputedStyle(validate).backgroundColor;
+    if(colorValidate==="rgb(29, 97, 84)"){
         fetchData();
+        asideAdd.style.display="none";
+        modaleAdd.style.display="none";
+        modaleGallery.style.display="flex";
+        initializeProject();
+
+    } else {
+        console.log("Veuillez remplir la totalité des champs pour ajouter votre photo");
     }
+}
+
+// Fonction qui transforme le nom de la catégorie en id pour l'API
+function nameToId(category){
+    if (category==="Objets"){
+        return category=1
+    } else if(category==="Appartements")
+    {
+        return category=2
+    } else if(category==="Hotels & restaurants")
+    {
+        return category=3
+    }
+    return category
 }
 
 // Fonction qui fetch les données du formulaire à l'API
 async function fetchData(){
-    document.querySelector('.validate-btn').addEventListener('click', async function() {
         const fileInput = document.getElementById('fileInput').files[0];
         const text = document.getElementById('text').value;
-        const category = document.getElementById('category').value;
-      
-        
+        const categoryString = document.getElementById('category').value;
+        const category = nameToId(categoryString);
         const formData = new FormData();
-        formData.append('projet', fileInput);
-        formData.append('titre', text);
-        formData.append('categorie', category);
-      
+        formData.append('image', fileInput);
+        formData.append('title', text);
+        formData.append('category', category);
         try {
-          const response = await fetch('http://localhost:5678/api/works', {
+          const response = await fetch("http://localhost:5678/api/works", {
             method: 'POST',
+            headers: {
+                'Authorization': `Bearer ${localStorage.getItem("identification")}`,
+            },
             body: formData,
           });
-          console.log(response)
           if (!response.ok) {
             throw new Error('Une erreur est survenue lors de la requête.');
           }
-      
-          const data = await response.json();
-          console.log(data)
+          const newProject = await response.json();
+          addPicture([newProject]);
         } catch (error) {
           console.error('Erreur:', error);
         }
-      });
-      
 }
+
 //Fonction principale qui appelle toutes les fonctions
 async function principal(){
     removePictureHTML();
@@ -318,23 +360,22 @@ async function principal(){
     const pictures =  await response.json();
     addPicture(pictures);
     const categories = [...new Set(pictures.map(picture=>picture.category.name))];
-    console.log(categories)
     addButton(categories,pictures);
     const token = localStorage.getItem("identification");
     if (token) {
         loginLogout();
-        const flex = document.querySelector('.flex')
+        const flex = document.querySelector('.flex');
         if (flex){
             deleteButton();
         }
-        addCategoriesSelect(categories)
+        addCategoriesSelect(categories);
         appearEdition();
         appearBtnModif();
         appearModal();
         modaleAdd();
         clickInput();
         validateChangeColor();
-        fetchOrNotData();
+        document.querySelector('.validate-btn').addEventListener('click', fetchOrNotData);
     }
 };
 

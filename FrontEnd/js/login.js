@@ -6,7 +6,7 @@ function validateEmail(email){
         verif = false;
     }
     return verif;
-};
+}
 
 function messageError (type){
     const existMessage = document.querySelector(".error-message");
@@ -25,7 +25,7 @@ function messageError (type){
     message.style.color ="red";
     message.className="error-message";
     h2Login.insertAdjacentElement("afterend",message);
-};
+}
 
 async function login(event){
     event.preventDefault();
@@ -45,7 +45,6 @@ async function login(event){
             body: JSON.stringify(identification)
         });
         if (response.status ==200){
-            console.log(response.status);
             const reponse = await response.json();
             localStorage.setItem("identification",reponse.token);
             window.location.replace("index.html");
@@ -56,8 +55,8 @@ async function login(event){
 
     } catch (error) {
          messageError(" Impossible de se connecter, veuillez réssayer utlérieurement");
-    };
-};
+    }
+}
 
 const buttonLogin = document.getElementById("button-form");
 buttonLogin.addEventListener('click',login);
