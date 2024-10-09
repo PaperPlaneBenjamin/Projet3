@@ -1,4 +1,7 @@
-// Fonction qui supprime dynamiquement les images du HTML
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//////////////////  1. Fonctions relatives à la création de la page présentant les travaux    //////////////////
+
+// Supprime dynamiquement les images du HTML
 function removePictureHTML(){
     const figures = document.querySelectorAll('.gallery figure');
     figures.forEach(figure => {
@@ -6,10 +9,10 @@ function removePictureHTML(){
     })
 }
 
-// Fonction qui génère dynamiquement les images de l'API
+// Génère dynamiquement les images de l'API
 function addPicture(pictures){
     const gallery = document.querySelector('.gallery');
-    const galleryModal = document.querySelector('.pictures-modal')
+    const galleryModal = document.querySelector('.pictures-modal');
     pictures.forEach(picture=>{
         // page 
         const figure = document.createElement("figure");
@@ -43,36 +46,7 @@ function addPicture(pictures){
     })
 }
 
-// Fonction qui teste si le nombre d'images est strictement supérieur à 12 et ajuste le css
-function adjustNumber(){
-    const allFigures = document.querySelectorAll('aside figure');
-    const h3Modale = document.querySelector('aside .modale-gallery h3');
-    const hrModale = document.querySelector('aside .modale-gallery hr');
-        if(allFigures.length>12){
-            h3Modale.classList.add('margin-adapt');
-            hrModale.classList.add('margin-adapt');
-        } else {
-            h3Modale.classList.remove('margin-adapt');
-            hrModale.classList.remove('margin-adapt');
-        }
-}
-
-
-// Fonction qui supprime les images au click sur les boutons 
-async function deletePicture(pictureId, figure, figureModale) {
-    const response = await fetch(`http://localhost:5678/api/works/${pictureId}`, {
-        method: 'DELETE',
-        headers: {
-            'Authorization': `Bearer ${localStorage.getItem("identification")}`
-        }});
-        if (response.ok) {
-            figure.remove(); 
-            figureModale.remove();
-            setTimeout(adjustNumber, 1);
-}}
-
-
-// Fonction qui crée les boutons de tri
+// Crée un boutons de tri
 function createButton(categorie,div,pictures){
     const button =document.createElement("div");
     button.className="item";
@@ -88,8 +62,7 @@ function createButton(categorie,div,pictures){
     return button;
 }
 
-
-// Fonction qui gère les boutons de tri  
+// Crée les boutons de tri  
 function addButton (categories,pictures){
     const h2 = document.querySelector(".h2-modal");
     const div =document.createElement("div");
@@ -103,7 +76,7 @@ function addButton (categories,pictures){
     })
 }
 
-// Fonction qui gère le mode CSS actif du bouton sélectionné
+// Gère le mode CSS actif du bouton sélectionné
 function activeButton(button){
     const allitems = document.querySelectorAll(".item");
     allitems.forEach(item=>{
@@ -117,14 +90,17 @@ function activeButton(button){
     
 }
 
-// Fonction qui filtre les images en fonction de la catégorie choisie 
+// Filtre les travaux en fonction de la catégorie choisie 
 function filterPictures(category,pictures){
     const picturesFiltered = category === "Tous" ? pictures : pictures.filter(picture=>picture.category.name===category);
     removePictureHTML();
     addPicture(picturesFiltered);
 }
 
- //Fonction qui change le texte du lien login à logout et ajoute un évènement au click à logout
+//////////////////////////////////////////////////////////////////////////////////////////////////////////
+////////////////////////////  2. Fonctions relatives au mode Login et Logout   ///////////////////////////
+
+ // Change le texte du lien login à logout et ajoute un évènement au click à logout
  function loginLogout() {
     const link = document.querySelector("ul li .a-index");
     if (link) {
@@ -133,26 +109,35 @@ function filterPictures(category,pictures){
     }
  }
 
-// Fonction qui supprime le token si on click sur logout et reload la page
+// Supprime le token si on click sur logout et reload la page
  function logout(event) {
     event.preventDefault();
     localStorage.removeItem("identification"); 
     window.location.reload();
  }
 
-// supprime les boutons
+// Cache les boutons
 function deleteButton(){
     const boxFlex = document.querySelector(".flex");
     boxFlex.style.display="none";
 }
 
-// affiche le bouton modifier 
+// Affiche le bouton modifier 
 function appearBtnModif(){
     const btnModal = document.querySelector(".btn-modal");
     btnModal.style.display = "flex";
 }
 
-// affiche la modale 
+// Affiche le bandeau noir édition 
+function appearEdition(){
+    const edition = document.querySelector(".banner");
+    edition.style.display="flex";
+}
+
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/////////// 3. Fonctions relatives à l'apparition de la modale et à la supression des travaux  ///////////////
+
+// Affiche la modale 
 function appearModal(){
     const modale = document.querySelector("aside");
     const mark = document.querySelector('.modale-gallery .fa-xmark');
@@ -175,13 +160,7 @@ function appearModal(){
     })
 }
 
-// affiche le bandeau noir édition 
-function appearEdition(){
-    const edition = document.querySelector(".banner");
-    edition.style.display="flex";
-}
-
-// Fonction qui gère la modale au click
+// Gère la modale au click
 function modaleAdd(){
     const btnAddPicture = document.querySelector(".btn-add-picture");
     const modaleGallery = document.querySelector(".modale-gallery");
@@ -202,13 +181,58 @@ function modaleAdd(){
     iconMark.addEventListener("click",()=>{
         asideAdd.style.display="none";
         modaleAdd.style.display="none";
-        modaleGallery.style.display="flex"
+        modaleGallery.style.display="flex";
         initializeProject();
     });
 
 }
 
-// Fonction qui permet de charger un projet
+// Supprime les images au click sur les boutons 
+async function deletePicture(pictureId, figure, figureModale) {
+    const response = await fetch(`http://localhost:5678/api/works/${pictureId}`, {
+        method: 'DELETE',
+        headers: {
+            'Authorization': `Bearer ${localStorage.getItem("identification")}`
+        }});
+        if (response.ok) {
+            figure.remove(); 
+            figureModale.remove();
+            setTimeout(adjustNumber, 1);
+}}
+
+// Teste si le nombre d'images est strictement supérieur à 12 et ajuste le css
+function adjustNumber(){
+    const allFigures = document.querySelectorAll('aside figure');
+    const h3Modale = document.querySelector('aside .modale-gallery h3');
+    const hrModale = document.querySelector('aside .modale-gallery hr');
+        if(allFigures.length>12){
+            h3Modale.classList.add('margin-adapt');
+            hrModale.classList.add('margin-adapt');
+        } else {
+            h3Modale.classList.remove('margin-adapt');
+            hrModale.classList.remove('margin-adapt');
+        }
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+///////////  4. Fonctions relatives à l'ajout de nouveaux travaux pour la page de présentation  ////////////////
+
+
+// Ajoute dynamiquement les catégories au sélect de l'ajout photo
+function addCategoriesSelect(categories){
+    const select = document.getElementById("category");
+    let i = 1;
+    categories.forEach(categorie=>{
+        const option = document.createElement("option");
+        option.value = categorie;
+        option.text = categorie;
+        option.id = i ;
+        select.appendChild(option);
+        i+=1;
+    })
+}
+
+// Permet de charger un projet
 function clickInput(){
     document.querySelector('.btn-charge-picture').addEventListener('click', function() {
         document.getElementById('fileInput').click();
@@ -238,27 +262,15 @@ function clickInput(){
         }
     });
 }
-// Fonction qui change la couleur du bouton valider si les tout les champs sont saisis
-function colorChange(){
-    const fileInput = document.getElementById('fileInput').files[0];
-    const text = document.getElementById("text").value;
-    const category = document.getElementById('category').value;
-    const validate = document.querySelector(".validate-btn");
-    if(fileInput && text !== "" && category !== ""){
-        validate.style.background="#1D6154";
-    }else{
-        validate.style.background="#A7A7A7";
-    }
-}
 
-// Fonction qui écoute les champs de saisie d'ajout d'un projet
+// Ecoute les champs de saisie d'ajout d'un projet
 function validateChangeColor(){
     document.getElementById('fileInput').addEventListener('change', colorChange);
     document.getElementById('text').addEventListener('input', colorChange);
     document.getElementById('category').addEventListener('change', colorChange);
 }
 
-// Fonction qui réinitialise la modale ajout d'un projet
+// Réinitialise la modale ajout d'un projet
 function initializeProject(){
     const fileInput = document.getElementById('fileInput');
     const text = document.getElementById("text");
@@ -278,59 +290,50 @@ function initializeProject(){
             child.style.display = 'flex';
         }
      });
+     errorRemove();
 
 }
 
-// Fonction qui ajoute dynamiquement les catégories au sélect de l'ajout photo
-function addCategoriesSelect(categories){
-    const select = document.getElementById("category");
-    categories.forEach(categorie=>{
-        const option = document.createElement("option");
-        option.value = categorie;
-        option.text = categorie;
-        select.appendChild(option);
-    })
+// Change la couleur du bouton valider si tout les champs sont saisis
+function colorChange(){
+    const fileInput = document.getElementById('fileInput').files[0];
+    const text = document.getElementById("text").value;
+    const category = document.getElementById('category').value;
+    const validate = document.querySelector(".validate-btn");
+    if(fileInput && text !== "" && category !== " "){
+        errorRemove();
+        validate.style.background="#1D6154";
+        fetchPost=true;
+    }else{
+        validate.style.background="#A7A7A7";
+    }
 }
 
-// Fonction qui fetch si le bouton est vert ( champ tous remplis )
+// Fetch si la variable fetchPost est vrai ( champ tous remplis )
 function fetchOrNotData(){
     const validate = document.querySelector(".validate-btn");
     const modaleGallery = document.querySelector(".modale-gallery");
     const modaleAdd = document.querySelector(".modale-add");
     const asideAdd = document.querySelector("aside");
-    const colorValidate = window.getComputedStyle(validate).backgroundColor;
-    if(colorValidate==="rgb(29, 97, 84)"){
+    if(fetchPost){
         fetchData();
         asideAdd.style.display="none";
         modaleAdd.style.display="none";
         modaleGallery.style.display="flex";
         initializeProject();
+        fetchPost=false;
 
     } else {
-        console.log("Veuillez remplir la totalité des champs pour ajouter votre photo");
+        errorAdd();
     }
 }
 
-// Fonction qui transforme le nom de la catégorie en id pour l'API
-function nameToId(category){
-    if (category==="Objets"){
-        return category=1
-    } else if(category==="Appartements")
-    {
-        return category=2
-    } else if(category==="Hotels & restaurants")
-    {
-        return category=3
-    }
-    return category
-}
-
-// Fonction qui fetch les données du formulaire à l'API
+// Fetch les données du formulaire à l'API
 async function fetchData(){
         const fileInput = document.getElementById('fileInput').files[0];
         const text = document.getElementById('text').value;
-        const categoryString = document.getElementById('category').value;
-        const category = nameToId(categoryString);
+        const select = document.getElementById("category");
+        const category = select.options[select.selectedIndex].id;
         const formData = new FormData();
         formData.append('image', fileInput);
         formData.append('title', text);
@@ -353,7 +356,21 @@ async function fetchData(){
         }
 }
 
-//Fonction principale qui appelle toutes les fonctions
+// Ajoute le message d'erreur du bouton valider ajout
+function errorAdd(){
+    const error = document.querySelector('.error-add-project');
+    error.style.visibility="visible";
+}
+
+// Retire le message d'erreur du bouton valider ajout
+function errorRemove(){
+    const error = document.querySelector('.error-add-project');
+    error.style.visibility="hidden";
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////
+////////////////////////  5. Fonction principale qui appelle toutes les fonctions //////////////////////////
+
 async function principal(){
     removePictureHTML();
     const response =  await fetch('http://localhost:5678/api/works');
@@ -378,5 +395,5 @@ async function principal(){
         document.querySelector('.validate-btn').addEventListener('click', fetchOrNotData);
     }
 };
-
+let fetchPost = false;
 principal();

@@ -1,3 +1,4 @@
+// Teste si le format du mail saisi est valide ou non
 function validateEmail(email){
     const regex = /^[a-zA-Z0-9]+([._-]?[a-zA-Z0-9]+)*@[a-zA-Z0-9-]+(\.[a-zA-Z]{2,})+$/;
     let verif = true ;
@@ -8,6 +9,7 @@ function validateEmail(email){
     return verif;
 }
 
+// Gère le message d'erreur pour le login 
 function messageError (type){
     const existMessage = document.querySelector(".error-message");
     if(existMessage){
@@ -27,6 +29,7 @@ function messageError (type){
     h2Login.insertAdjacentElement("afterend",message);
 }
 
+// Effectue le fetch avec la méthode POST pour se connecter au compte administrateur
 async function login(event){
     event.preventDefault();
     const email = document.getElementById("email");

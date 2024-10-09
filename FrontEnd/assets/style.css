@@ -189,7 +189,7 @@ footer nav ul {
 	margin: 2em
 }
 
-/******************** Add CSS ****************************************/
+/**************************** Add CSS ****************************************/
 
 .h1{
 	cursor: pointer;
@@ -293,6 +293,9 @@ body {
 	margin-bottom: 10px;
 }
 
+.bold{
+	font-weight: bold;
+}
 /********************* CSS Modale *******************/
 
 .margin-adapt {
@@ -352,7 +355,7 @@ aside .modale-gallery {
 	flex-direction: column;
 	background-color: white;
 	width: 600px;
-	height: 465px;
+	height: 475px;
 	max-height: 600px;
 	padding: 20px;
 	border-radius: 10px;
@@ -430,7 +433,7 @@ aside .modale-add{
 	flex-direction: column;
 	background-color: white;
 	width: 600px;
-	height: 465px;
+	height: 475px;
 	padding: 20px;
 	border-radius: 10px;
 	gap: 14px;
@@ -508,4 +511,15 @@ aside .modale-add{
 
 #fileInput{
 	display: none;
+}
+.error-add-project{
+	display: flex;
+	justify-content: center;
+	visibility: hidden;
+    font-size: 10px;
+    color: red;
+}
+
+.scale-instagram{
+	transform: scale(0.7) !important;
 }
